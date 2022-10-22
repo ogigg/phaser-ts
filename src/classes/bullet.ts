@@ -16,10 +16,13 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group
 	}
 
     fireBullet(shooter: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody, target: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
-		const bullet = this.getFirstDead(false);
+        const bullet = this.getFirstDead(false);
 		if (bullet) {
+            this.scene.sound.get('gunshot').play();
 			bullet.fire(shooter, target);
-		}
+		} else {
+            this.scene.sound.get('emptyGunshot').play();
+        }
 	}
  
 }

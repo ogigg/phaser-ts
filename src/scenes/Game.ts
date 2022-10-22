@@ -23,10 +23,14 @@ export default class Demo extends Phaser.Scene {
     this.load.image('bullet', 'bullet.png');
     this.load.image('crosshair', 'crosshair.png');
     this.load.image('map', 'map.jpeg');
+    this.load.audio('gunshot', 'sound/gun-shot.mp3');
+    this.load.audio('emptyGunshot', 'sound/empty-gun-shot.mp3');
 
   }
 
   create() {
+    this.sound.add('gunshot');
+    this.sound.add('emptyGunshot');
     this.add.image(400, 300, 'map');
     this.player = this.physics.add.sprite(100, 100, 'player');
     this.player.setScale(0.1);
