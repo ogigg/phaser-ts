@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { HealthBar } from './health-bar';
 
 export default class Enemy {
   private target?: Phaser.GameObjects.Components.Transform;
@@ -6,12 +7,14 @@ export default class Enemy {
   private y: number = 0;
   private health: number = 100;
   private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private healthBar!: HealthBar;
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     this.x = x;
     this.y = y;
     this.enemy = scene.physics.add.sprite(x, y, texture);
     this.enemy.setScale(0.1);
+    this.healthBar = new HealthBar(scene, x - 40, y - 40);
   }
 
   setTarget(target: Phaser.GameObjects.Components.Transform) {
@@ -39,9 +42,11 @@ export default class Enemy {
 
   removeHealth(hpDelta: number): void {
     this.health -= hpDelta;
+    this.healthBar.decrease(hpDelta);
     if (this.health <= 0) {
       this.enemy.setActive(false).setVisible(false);
       this.enemy.destroy();
+      this.healthBar.destroy();
     }
   }
 }
