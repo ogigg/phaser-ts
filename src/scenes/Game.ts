@@ -22,10 +22,12 @@ export default class Demo extends Phaser.Scene {
     this.load.image('player', 'player.png');
     this.load.image('bullet', 'bullet.png');
     this.load.image('crosshair', 'crosshair.png');
+    this.load.image('map', 'map.jpeg');
 
   }
 
   create() {
+    this.add.image(400, 300, 'map');
     this.player = this.physics.add.sprite(100, 100, 'player');
     this.player.setScale(0.1);
     this.keyboard = {
