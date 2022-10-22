@@ -23,6 +23,7 @@ export class BulletGroup extends Phaser.Physics.Arcade.Group
 		} else {
             this.scene.sound.get('emptyGunshot').play();
         }
+        return bullet;
 	}
  
 }
