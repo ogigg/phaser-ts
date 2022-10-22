@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import { Bullet, BulletGroup } from '../classes/bullet';
+import Enemy from '../classes/enemy';
 
 export default class Demo extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private enemies!: Phaser.GameObjects.Group;
   private crosshair!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private keyboard!: {
     a: Phaser.Input.Keyboard.Key;
@@ -45,6 +47,22 @@ export default class Demo extends Phaser.Scene {
 
     this.crosshair = this.physics.add.sprite(100, 100, 'crosshair');
     this.crosshair.setOrigin(0.5, 0.5).setDisplaySize(25, 25).setCollideWorldBounds(true);
+
+    this.enemies = this.add.group({
+			classType: Enemy,
+			runChildUpdate: true
+		})
+
+    this.enemies.get(200, 150, 'player')
+		this.enemies.get(600, 450, 'player')
+		this.enemies.get(200, 450, 'player')
+		this.enemies.get(600, 150, 'player')
+
+    this.enemies.children.each(child => {
+			const enemy = child as Enemy
+			enemy.setTarget(this.player!)
+		})
+
 
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
       this.crosshair.x = pointer.x;
