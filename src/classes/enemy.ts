@@ -49,4 +49,8 @@ export default class Enemy {
       this.healthBar.destroy();
     }
   }
+
+  getHealth(): number {
+    return this.health;
+  }
 }

@@ -6,6 +6,7 @@ export default class Demo extends Phaser.Scene {
   private player!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private enemies: Enemy[] = [];
   private crosshair!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  private music!: Phaser.Sound.BaseSound;
   private keyboard!: {
     a: Phaser.Input.Keyboard.Key;
     w: Phaser.Input.Keyboard.Key;
@@ -33,8 +34,8 @@ export default class Demo extends Phaser.Scene {
   create() {
     this.sound.add('gunshot');
     this.sound.add('emptyGunshot');
-    const music = this.sound.add('bgmusic', { volume: 0.1, loop: true });
-    music.play();
+    this.music = this.sound.add('bgmusic', { volume: 0.1, loop: true });
+    this.music.play();
     this.add.image(400, 300, 'map');
     this.player = this.physics.add.sprite(100, 100, 'player');
     this.player.setScale(0.1);
@@ -95,6 +96,11 @@ export default class Demo extends Phaser.Scene {
       this.crosshair.y
     );
     this.enemies.forEach(enemy => enemy.update(t, dt));
+    if (!this.enemies.some(enemy => enemy.getHealth() > 0)) {
+      this.music.stop();
+      this.scene.stop();
+      this.scene.start('EndScene', { text: 'Victory!' });
+    }
   }
 
   enemyHitCallback(
