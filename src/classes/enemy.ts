@@ -1,13 +1,16 @@
 import Phaser from 'phaser';
+import { BulletGroup } from './bullet';
 import { HealthBar } from './health-bar';
 
 export default class Enemy {
-  private target?: Phaser.GameObjects.Components.Transform;
+  private target!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private x: number = 0;
   private y: number = 0;
   private health: number = 100;
   private enemy!: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   private healthBar!: HealthBar;
+  private enemyBullets!: BulletGroup;
+  private shootCounter = Math.floor(Math.random() * (30 - 1) + 0);
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     this.x = x;
@@ -15,9 +18,10 @@ export default class Enemy {
     this.enemy = scene.physics.add.sprite(x, y, texture);
     this.enemy.setScale(0.1);
     this.healthBar = new HealthBar(scene, x - 40, y - 40);
+    this.enemyBullets = new BulletGroup(scene);
   }
 
-  setTarget(target: Phaser.GameObjects.Components.Transform) {
+  setTarget(target: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody) {
     this.target = target;
   }
 
@@ -34,6 +38,11 @@ export default class Enemy {
 
     const rotation = Phaser.Math.Angle.Between(x, y, tx, ty);
     this.enemy.setRotation(rotation);
+    if (this.shootCounter === 60 && this.health > 0) {
+      this.onShoot();
+      this.shootCounter = 0;
+    }
+    this.shootCounter++;
   }
 
   getSprite(): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody {
@@ -52,5 +61,9 @@ export default class Enemy {
 
   getHealth(): number {
     return this.health;
+  }
+
+  onShoot() {
+    this.enemyBullets.fireBullet(this.enemy, this.target);
   }
 }

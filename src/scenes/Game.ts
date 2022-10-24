@@ -111,21 +111,5 @@ export default class Demo extends Phaser.Scene {
     console.log('trafionee');
     enemy.removeHealth(34);
     bulletHit.destroy();
-
-    // // Reduce health of enemy
-    // if (bulletHit.active === true && enemyHit.active === true)
-    // {
-    //     enemyHit.health = enemyHit.health - 1;
-    //     console.log("Enemy hp: ", enemyHit.health);
-
-    //     // Kill enemy if health <= 0
-    //     if (enemyHit.health <= 0)
-    //     {
-    //        enemyHit.setActive(false).setVisible(false);
-    //     }
-
-    //     // Destroy bullet
-    //     bulletHit.setActive(false).setVisible(false);
-    // }
   }
 }
